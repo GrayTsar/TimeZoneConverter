@@ -8,13 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
-        <!-- Query Text Color -->
-        <item name="android:textColorPrimary">#FFFFFF</item>
-        <!-- Hint Color -->
-        <item name="android:textColorHint">#FFFFFF</item>
-        <!-- Icon Color -->
-        <item name="android:tint">#FFFFFF</item>
+    <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="android:textColorPrimary">@color/colorText</item>
+        <item name="colorControlNormal"> @color/colorText </item>
     </style>
 
 </resources>

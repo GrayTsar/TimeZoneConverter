@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Zeitzonenrechner</string>
+    <string name="search">Suchen</string>
+    <string name="hintSearch">Das Suchen Symbol clicken, Oben Rechts</string>
+    <string name="timeIn">In</string>
+</resources>

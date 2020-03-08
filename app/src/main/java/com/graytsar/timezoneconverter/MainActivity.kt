@@ -1,21 +1,25 @@
 package com.graytsar.timezoneconverter
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Filter
-import androidx.appcompat.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlinx.android.synthetic.main.activity_main.*
-import org.threeten.bp.*
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.TextStyle
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
+import kotlin.math.abs
+
 
 class MainActivity : AppCompatActivity() {
     private val list = ArrayList<ModelTimeZone>()
@@ -23,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     //this feels not right, but can not find anything better
     var mMenu:Menu? = null
+    var sTimeZone:ModelTimeZone? = null
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,17 +35,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         AndroidThreeTen.init(this)
 
-        val l = ArrayList<String>()
-        val lid = ArrayList<String>()
         ZoneId.getAvailableZoneIds().forEach {
             val long = ZoneId.of(it).getDisplayName(TextStyle.FULL, Locale.getDefault())
             val offset = ZonedDateTime.now(ZoneId.of(it)).offset.toString()
-            l.add(long)
-            lid.add(it)
-
             list.add(ModelTimeZone(it, long, "UTC$offset"))
-            //Log.d("DBG:", ZonedDateTime.now(ZoneId.of(it)).toString() + " " + ZonedDateTime.now(ZoneId.of(it)).offset.toString())
-            //Log.d("DBG:", "$it $long")
         }
         list.sortBy {
             it.longName
@@ -49,17 +47,54 @@ class MainActivity : AppCompatActivity() {
         val zoneDateTime = ZonedDateTime.now()
         textCurrentLongName.text = zoneDateTime.zone.getDisplayName(TextStyle.FULL, Locale.getDefault())
         textCurrentId.text = zoneDateTime.zone.id
-        textCurrentOffset.text = "UTC ${zoneDateTime.offset}"
 
         val localTime = zoneDateTime.toLocalTime()
-        textCurrentTime.text = "${String.format("%02d", localTime.hour)}:${String.format("%02d", localTime.minute)}"
+        textCurrentTime.text = "${String.format("%02d", localTime.hour)}:${String.format("%02d", localTime.minute)} UTC${zoneDateTime.offset}"
+
+        timePicker.setIs24HourView(true)
+        //timePicker.hour = localTime.hour
+        //timePicker.minute = localTime.minute
+
+        if(Build.VERSION.SDK_INT < 23){
+            timePicker.currentHour = localTime.hour
+            timePicker.currentMinute = localTime.minute
+        } else {
+            timePicker.hour = localTime.hour
+            timePicker.minute = localTime.minute
+        }
 
         adapterTimeZone = AdapterTimeZone(this)
         recyclerMain.layoutManager = LinearLayoutManager(this)
         recyclerMain.adapter = adapterTimeZone
         adapterTimeZone.submitList(list)
 
-        val a = 0
+        timePicker.setOnTimeChangedListener{ picker,hour,min ->
+            if(sTimeZone != null){
+                val zdt = ZonedDateTime.now()
+                val zonedTime = ZonedDateTime.now(ZoneId.of(sTimeZone!!.id)).withHour(hour).withMinute(min)
+                val s = zonedTime.toEpochSecond() - zdt.toEpochSecond()
+
+                textCurrentLongName.text = zdt.zone.getDisplayName(TextStyle.FULL, Locale.getDefault())
+                textCurrentId.text = zdt.zone.id
+                //textCurrentTime.text = "${String.format("%02d", zdt.hour)}:${String.format("%02d", zdt.minute)} UTC${zdt.offset}"
+
+                if(s >= 0){
+                    val h = TimeUnit.SECONDS.toHours(s)
+                    val m = TimeUnit.SECONDS.toMinutes(s) - TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(s))
+                    textDiffTime.text = "${getString(R.string.timeIn)} ${String.format("%02d:%02d", h, m)}"
+
+                    val z = zdt.plusMinutes(m).plusHours(h)
+                    textCurrentTime.text = "${String.format("%02d", z.hour)}:${String.format("%02d", z.minute)} UTC${z.offset}"
+                } else {
+                    val h = 24 - abs(TimeUnit.SECONDS.toHours(s))
+                    val m = abs(TimeUnit.SECONDS.toMinutes(s) - TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(s)))
+                    textDiffTime.text = "${getString(R.string.timeIn)} ${String.format("%02d:%02d", h, m)}"
+
+                    val z = zdt.plusMinutes(m).plusHours(h)
+                    textCurrentTime.text = "${String.format("%02d", z.hour)}:${String.format("%02d", z.minute)} UTC${z.offset}"
+                }
+            }
+        }
     }
 
     val itemFilter = object: Filter() {
@@ -130,5 +165,4 @@ class MainActivity : AppCompatActivity() {
 
         return true
     }
-
 }
