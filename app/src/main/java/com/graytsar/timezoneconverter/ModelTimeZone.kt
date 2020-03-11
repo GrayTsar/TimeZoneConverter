@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 
-class ModelTimeZone(val id:String, val longName:String, val offset:String){
+class ModelTimeZone(val id:String, val longName:String, val offset:String, val shortName:String){
 
     @SuppressLint("SetTextI18n")
     fun onClick(view: View){

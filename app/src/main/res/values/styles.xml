@@ -5,12 +5,18 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="titleTextColor">@color/colorTextSearch</item>
+        <item name="colorAccent">@color/colorTextSearch</item>
+        <item name="actionBarTheme">@style/acTheme</item>
     </style>
 
     <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.NoActionBar" >
         <item name="android:textColorPrimary">@color/colorText</item>
         <item name="colorControlNormal"> @color/colorText </item>
+    </style>
+
+    <style name="acTheme" parent="Widget.AppCompat.SearchView.ActionBar">
+        <item name="colorControlNormal">@color/colorTextSearch</item>
     </style>
 
 </resources>

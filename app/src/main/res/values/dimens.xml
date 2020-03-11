@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_search_horizontal">16dp</dimen>
+    <dimen name="padding_search_vertical">8dp</dimen>
+
+    <dimen name="padding_main_horizontal">8dp</dimen>
+    <dimen name="padding_main_vertical">8dp</dimen>
+</resources>

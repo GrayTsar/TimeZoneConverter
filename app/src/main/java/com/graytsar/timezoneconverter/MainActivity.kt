@@ -6,9 +6,12 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import android.widget.Filter
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlinx.android.synthetic.main.activity_main.*
@@ -38,7 +41,13 @@ class MainActivity : AppCompatActivity() {
         ZoneId.getAvailableZoneIds().forEach {
             val long = ZoneId.of(it).getDisplayName(TextStyle.FULL, Locale.getDefault())
             val offset = ZonedDateTime.now(ZoneId.of(it)).offset.toString()
-            list.add(ModelTimeZone(it, long, "UTC$offset"))
+
+            var shortName = ""
+            long.split(" ").forEach {ch ->
+                shortName += ch[0]
+            }
+
+            list.add(ModelTimeZone(it, long, "UTC$offset", shortName))
         }
         list.sortBy {
             it.longName
@@ -52,8 +61,6 @@ class MainActivity : AppCompatActivity() {
         textCurrentTime.text = "${String.format("%02d", localTime.hour)}:${String.format("%02d", localTime.minute)} UTC${zoneDateTime.offset}"
 
         timePicker.setIs24HourView(true)
-        //timePicker.hour = localTime.hour
-        //timePicker.minute = localTime.minute
 
         if(Build.VERSION.SDK_INT < 23){
             timePicker.currentHour = localTime.hour
@@ -101,7 +108,7 @@ class MainActivity : AppCompatActivity() {
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             val filteredList = ArrayList<ModelTimeZone>()
 
-            if(constraint == null || constraint.isEmpty()){
+            if(constraint == null){
                 filteredList.addAll(list)
             } else {
                 val defaultLocale = Locale.getDefault()
@@ -109,10 +116,12 @@ class MainActivity : AppCompatActivity() {
                 val pattern = constraint.toString().toLowerCase(defaultLocale).trim()
 
                 list.forEach{
-                    if(
+                    if
+                    (
                         it.id.toLowerCase(defaultLocale).contains(pattern) ||
                         it.longName.toLowerCase(defaultLocale).contains(pattern) ||
-                        it.offset.toLowerCase(defaultLocale).contains(pattern)
+                        it.offset.toLowerCase(defaultLocale).contains(pattern) ||
+                        it.shortName.toLowerCase(defaultLocale).contains(pattern)
                     ){
                         filteredList.add(it)
                     }
@@ -121,7 +130,6 @@ class MainActivity : AppCompatActivity() {
 
             val result = FilterResults()
             result.values = filteredList
-
             return result
         }
 
@@ -139,6 +147,47 @@ class MainActivity : AppCompatActivity() {
 
         val item = menu.findItem(R.id.searchView)
         val searchView = item.actionView as SearchView
+
+
+        /*
+            final SearchAutoComplete mSearchSrcTextView;
+            private final View mSearchEditFrame;
+            private final View mSearchPlate;
+            private final View mSubmitArea;
+            final ImageView mSearchButton;
+            final ImageView mGoButton;
+            final ImageView mCloseButton;
+            final ImageView mVoiceButton;
+
+         */
+
+        val searchText = searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+        searchText.setTextColor(ContextCompat.getColor(applicationContext, R.color.colorTextSearch))
+        searchText.setHintTextColor(ContextCompat.getColor(applicationContext, R.color.colorTextSearchHint))
+
+        //searchView X button
+        val searchClose = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+        searchClose.setColorFilter(ContextCompat.getColor(applicationContext, R.color.colorTextSearch))
+
+        /*
+        val searchGo = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_go_btn)
+        searchGo.setColorFilter(ContextCompat.getColor(applicationContext, R.color.colorTextSearch))
+        searchGo.setImageResource(R.drawable.ic_app_rectangle)
+
+        val searchMag = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_mag_icon)
+        searchMag.setColorFilter(ContextCompat.getColor(applicationContext, R.color.colorTextSearch))
+        searchMag.setImageResource(R.drawable.ic_app_rectangle)
+
+        val searchVoice = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_voice_btn)
+        searchVoice.setColorFilter(ContextCompat.getColor(applicationContext, R.color.colorTextSearch))
+        searchVoice.setImageResource(R.drawable.ic_app_rectangle)
+
+        val searchButton = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_button)
+        searchButton.setColorFilter(ContextCompat.getColor(applicationContext, R.color.colorTextSearch))
+        searchButton.setImageResource(R.drawable.ic_app_rectangle)
+        */
+
+
 
         item.setOnActionExpandListener(object: MenuItem.OnActionExpandListener{
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
