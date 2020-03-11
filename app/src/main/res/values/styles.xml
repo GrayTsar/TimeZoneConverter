@@ -16,7 +16,16 @@
     </style>
 
     <style name="acTheme" parent="Widget.AppCompat.SearchView.ActionBar">
+        <!--EditText textColor-->
+        <item name="android:textColorPrimary">@color/colorTextSearch</item>
+        <!--EditText textColorHint -->
+        <item name="android:textColorHint">@color/colorTextSearchHint</item>
+        <!--EditText textColorHighlight-->
+        <!--<item name="android:textColorHighlight">@color/colorTextSearch</item>-->
+        <!--for @drawable/..... icon tint <style name="Base.Widget.AppCompat.SearchView" parent="android:Widget"> -->
         <item name="colorControlNormal">@color/colorTextSearch</item>
+        <!--android:drawable/text_cursor_material tint -->
+        <item name="colorControlActivated">@color/colorTextSearch</item>
     </style>
 
 </resources>

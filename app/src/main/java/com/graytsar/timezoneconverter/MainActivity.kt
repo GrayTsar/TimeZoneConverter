@@ -148,47 +148,6 @@ class MainActivity : AppCompatActivity() {
         val item = menu.findItem(R.id.searchView)
         val searchView = item.actionView as SearchView
 
-
-        /*
-            final SearchAutoComplete mSearchSrcTextView;
-            private final View mSearchEditFrame;
-            private final View mSearchPlate;
-            private final View mSubmitArea;
-            final ImageView mSearchButton;
-            final ImageView mGoButton;
-            final ImageView mCloseButton;
-            final ImageView mVoiceButton;
-
-         */
-
-        val searchText = searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
-        searchText.setTextColor(ContextCompat.getColor(applicationContext, R.color.colorTextSearch))
-        searchText.setHintTextColor(ContextCompat.getColor(applicationContext, R.color.colorTextSearchHint))
-
-        //searchView X button
-        val searchClose = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
-        searchClose.setColorFilter(ContextCompat.getColor(applicationContext, R.color.colorTextSearch))
-
-        /*
-        val searchGo = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_go_btn)
-        searchGo.setColorFilter(ContextCompat.getColor(applicationContext, R.color.colorTextSearch))
-        searchGo.setImageResource(R.drawable.ic_app_rectangle)
-
-        val searchMag = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_mag_icon)
-        searchMag.setColorFilter(ContextCompat.getColor(applicationContext, R.color.colorTextSearch))
-        searchMag.setImageResource(R.drawable.ic_app_rectangle)
-
-        val searchVoice = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_voice_btn)
-        searchVoice.setColorFilter(ContextCompat.getColor(applicationContext, R.color.colorTextSearch))
-        searchVoice.setImageResource(R.drawable.ic_app_rectangle)
-
-        val searchButton = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_button)
-        searchButton.setColorFilter(ContextCompat.getColor(applicationContext, R.color.colorTextSearch))
-        searchButton.setImageResource(R.drawable.ic_app_rectangle)
-        */
-
-
-
         item.setOnActionExpandListener(object: MenuItem.OnActionExpandListener{
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                 recyclerMain.visibility = View.VISIBLE
