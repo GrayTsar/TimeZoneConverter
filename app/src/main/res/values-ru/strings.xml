@@ -4,4 +4,7 @@
     <string name="search">Поиск</string>
     <string name="hintSearch">Нажать на символ в правом верхнем угу</string>
     <string name="timeIn">Через</string>
+
+    <string name="lightTheme">легкая тема</string>
+    <string name="darkTheme">темная тема</string>
 </resources>

@@ -10,4 +10,11 @@
         app:iconTint="@color/colorTextSearch"
         app:showAsAction="collapseActionView|ifRoom"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
+    <item
+        android:id="@+id/lightTheme"
+        android:title="@string/lightTheme" />
+    <item
+        android:id="@+id/darkTheme"
+        android:title="@string/darkTheme" />
 </menu>

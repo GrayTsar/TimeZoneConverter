@@ -1,6 +1,7 @@
 package com.graytsar.timezoneconverter
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -10,6 +11,7 @@ import android.widget.EditText
 import android.widget.Filter
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +25,8 @@ import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 import kotlin.math.abs
 
+const val keyPreferenceTheme="preferenceTheme"
+const val keyTheme="theme"
 
 class MainActivity : AppCompatActivity() {
     private val list = ArrayList<ModelTimeZone>()
@@ -102,6 +106,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        val sharedPref = this.getSharedPreferences(keyPreferenceTheme, Context.MODE_PRIVATE)
+        if(sharedPref.getBoolean(keyTheme, false)){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
     }
 
     val itemFilter = object: Filter() {
@@ -170,7 +179,31 @@ class MainActivity : AppCompatActivity() {
                 return false
             }
         })
-
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.lightTheme -> {
+                val sharedPref = this.getSharedPreferences(keyPreferenceTheme, Context.MODE_PRIVATE)
+                val editor = sharedPref.edit()
+                editor.putBoolean(keyTheme, false)
+                editor.apply()
+
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+            R.id.darkTheme -> {
+                val sharedPref = this.getSharedPreferences(keyPreferenceTheme, Context.MODE_PRIVATE)
+                val editor = sharedPref.edit()
+                editor.putBoolean(keyTheme, true)
+                editor.apply()
+
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+            else -> {
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
