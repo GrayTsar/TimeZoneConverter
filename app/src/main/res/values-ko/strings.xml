@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">표준시간대변환기</string>
+    <string name="search">검색</string>
+    <string name="hintSearch">오른쪽 위에 있는 검색 아이콘 클릭해주세요</string>
+    <string name="timeIn">후</string>
+
+    <string name="lightTheme">라이트 테마</string>
+    <string name="darkTheme">다크 테마</string>
+</resources>
