@@ -14,10 +14,10 @@ class ModelTimeZone(val id:String, val longName:String, val offset:String, val s
         val ctx = view.context as MainActivity
         ctx.mMenu?.findItem(R.id.searchView)?.collapseActionView()
 
-        ctx.textSelectLongDescription.text = longName
+        ctx.textSelectLongName.text = longName
         ctx.textSelectId.text = id
         ctx.textSelectOffset.text = offset
-        ctx.sTimeZone = this
+        ctx.selectedTimeZone = this
 
         val zonedTime = ZonedDateTime.now(ZoneId.of(id)).toLocalTime()
 

@@ -9,4 +9,7 @@
     <color name="colorBackground">#fafafa</color>
     <color name="colorTextSearch">#FFFFFF</color>
     <color name="colorTextSearchHint">#eeeeee</color>
+
+    <color name="colorToolbarItems">#ffffff</color>
+    <color name="colorToolbarMenuText">#000000</color>
 </resources>

@@ -1,5 +1,6 @@
 package com.graytsar.timezoneconverter
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.graytsar.timezoneconverter.databinding.ItemSearchBinding
+import kotlinx.android.synthetic.main.activity_main.*
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZonedDateTime
 
 class AdapterTimeZone(private val activity:MainActivity): ListAdapter<ModelTimeZone, ViewHolderTimeZone>(DiffCallbackTimeZone())  {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderTimeZone {
@@ -18,10 +22,19 @@ class AdapterTimeZone(private val activity:MainActivity): ListAdapter<ModelTimeZ
     override fun onBindViewHolder(holder: ViewHolderTimeZone, position: Int) {
         holder.binding.lifecycleOwner = activity
         holder.binding.modelTimeZone = getItem(position)
+
+        //holder.binding.itemSearch.setOnClickListener {
+        //    holder.onClick(it)
+        //}
     }
 }
 
 class ViewHolderTimeZone(view: View, val binding:ItemSearchBinding): RecyclerView.ViewHolder(view){
+    fun onClick(view: View){
+        binding.modelTimeZone?.let { model ->
+
+        }
+    }
 }
 
 class DiffCallbackTimeZone: DiffUtil.ItemCallback<ModelTimeZone>(){

@@ -8,9 +8,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/itemSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/itemSearch"
+        android:backgroundTint="@color/colorBackground"
         android:onClick="@{modelTimeZone::onClick}">
 
         <TextView
@@ -32,11 +33,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_search_horizontal"
-            android:layout_marginTop="@dimen/padding_search_vertical"
-            android:layout_marginBottom="@dimen/padding_search_vertical"
+            android:layout_marginBottom="8dp"
             android:text="@{modelTimeZone.id}"
-            android:textSize="18sp"
             android:textColor="@color/colorText"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textSearchLong" />
@@ -46,9 +46,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="@dimen/padding_search_vertical"
             android:layout_marginEnd="@dimen/padding_search_horizontal"
-            android:layout_marginBottom="@dimen/padding_search_vertical"
+            android:layout_marginBottom="8dp"
             android:text="@{modelTimeZone.offset}"
             android:textColor="@color/colorText"
             android:textSize="18sp"
