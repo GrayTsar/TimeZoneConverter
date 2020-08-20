@@ -11,8 +11,7 @@
         android:id="@+id/itemSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorBackground"
-        android:onClick="@{modelTimeZone::onClick}">
+        android:backgroundTint="@color/colorBackground">
 
         <TextView
             android:id="@+id/textSearchLong"

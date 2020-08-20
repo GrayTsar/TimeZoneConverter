@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -27,14 +28,13 @@ import org.threeten.bp.format.TextStyle
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
-import kotlin.math.abs
 
 const val keyPreferenceTheme="preferenceTheme"
 const val keyTheme="theme"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding:ActivityMainBinding
-    private val viewModelMain:ViewModelMain by viewModels()
+    val viewModelMain:ViewModelMain by viewModels()
 
     private lateinit var textCurrentLongName: TextView
     private lateinit var textCurrentId: TextView
@@ -54,8 +54,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapterTimeZone:AdapterTimeZone
 
     var mMenu:Menu? = null
-
-    var selectedTimeZone:ModelTimeZone? = null
 
 
     @SuppressLint("SetTextI18n")
@@ -215,23 +213,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initTimeZones() {
-        lifecycleScope.launch {
-            ZoneId.getAvailableZoneIds().forEach {
-                val long = ZoneId.of(it).getDisplayName(TextStyle.FULL, Locale.getDefault())
-                val offset = ZonedDateTime.now(ZoneId.of(it)).offset.toString()
+        ZoneId.getAvailableZoneIds().forEach {
+            val long = ZoneId.of(it).getDisplayName(TextStyle.FULL, Locale.getDefault())
+            val offset = ZonedDateTime.now(ZoneId.of(it)).offset.toString()
 
-                var shortName = ""
-                long.split(" ").forEach {ch ->
-                    shortName += ch[0]
-                }
+            var shortName = ""
+            long.split(" ").forEach {ch ->
+                shortName += ch[0]
+            }
 
-                list.add(ModelTimeZone(it, long, "UTC$offset", shortName))
-            }
-            list.sortBy {
-                it.longName
-            }
-            adapterTimeZone.submitList(list)
+            list.add(ModelTimeZone(it, long, "UTC$offset", shortName))
         }
+        list.sortBy {
+            it.longName
+        }
+        adapterTimeZone.submitList(list)
     }
 
     private fun initObserver() {
@@ -262,33 +258,53 @@ class MainActivity : AppCompatActivity() {
         viewModelMain.selectedOffset.observe(this, androidx.lifecycle.Observer {
             textSelectOffset.text = it
         })
+
+        viewModelMain.selectedHour.observe(this, androidx.lifecycle.Observer {
+            if(Build.VERSION.SDK_INT < 23){
+                timePicker.currentHour = it
+            } else {
+                timePicker.hour = it
+            }
+        })
+
+        viewModelMain.selectedMinute.observe(this, androidx.lifecycle.Observer {
+            if(Build.VERSION.SDK_INT < 23){
+                timePicker.currentMinute = it
+            } else {
+                timePicker.minute = it
+            }
+        })
     }
 
     private fun timeChangedListener(picker: TimePicker, hour: Int, min: Int) {
-        selectedTimeZone?.let { selectedTimeZone ->
-            val zdt = ZonedDateTime.now()
-            val zonedTime = ZonedDateTime.now(ZoneId.of(selectedTimeZone.id)).withHour(hour).withMinute(min)
-            val s = zonedTime.toEpochSecond() - zdt.toEpochSecond()
+        viewModelMain.selectedTimeZone?.let { selectedTimeZone ->
+            val currentZonedDateTime = ZonedDateTime.now()
+            val selectedZonedDateTime = ZonedDateTime.now(ZoneId.of(selectedTimeZone.id)).withHour(hour).withMinute(min)
+            val epochSecond = selectedZonedDateTime.toEpochSecond() - currentZonedDateTime.toEpochSecond()
 
-            viewModelMain.currentLongName.value = zdt.zone.getDisplayName(TextStyle.FULL, Locale.getDefault())
-            viewModelMain.currentId.value = zdt.zone.id
-            //textCurrentTime.text = "${String.format("%02d", zdt.hour)}:${String.format("%02d", zdt.minute)} UTC${zdt.offset}"
+            viewModelMain.currentLongName.value = currentZonedDateTime.zone.getDisplayName(TextStyle.FULL, Locale.getDefault())
+            viewModelMain.currentId.value = currentZonedDateTime.zone.id
 
-            if(s >= 0){
-                val h = TimeUnit.SECONDS.toHours(s)
-                val m = TimeUnit.SECONDS.toMinutes(s) - TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(s))
+            if(epochSecond >= 0) {
+                val h = TimeUnit.SECONDS.toHours(epochSecond)
+                val m = TimeUnit.SECONDS.toMinutes(epochSecond) - TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(epochSecond))
                 viewModelMain.diffTime.value = "${getString(R.string.timeIn)} ${String.format("%02d:%02d", h, m)}"
 
-                val z = zdt.plusMinutes(m).plusHours(h)
-                viewModelMain.currentTime.value = "${String.format("%02d", z.hour)}:${String.format("%02d", z.minute)} UTC${z.offset}"
+                currentZonedDateTime.plusMinutes(m).plusHours(h).let {
+                    viewModelMain.currentTime.value = "${String.format("%02d", it.hour)}:${String.format("%02d",it.minute)} UTC${it.offset}"
+                }
             } else {
-                val h = 24 - abs(TimeUnit.SECONDS.toHours(s))
-                val m = abs(TimeUnit.SECONDS.toMinutes(s) - TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(s)))
+                val s1 = 86400 + epochSecond
+
+                val h = TimeUnit.SECONDS.toHours(s1)
+                val m = TimeUnit.SECONDS.toMinutes(s1) - TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(s1))
                 viewModelMain.diffTime.value = "${getString(R.string.timeIn)} ${String.format("%02d:%02d", h, m)}"
 
-                val z = zdt.plusMinutes(m).plusHours(h)
-                viewModelMain.currentTime.value = "${String.format("%02d", z.hour)}:${String.format("%02d", z.minute)} UTC${z.offset}"
+                currentZonedDateTime.plusMinutes(m).plusHours(h).let {
+                    viewModelMain.currentTime.value = "${String.format("%02d", it.hour)}:${String.format("%02d",it.minute)} UTC${it.offset}"
+                }
             }
+
         }
     }
 }

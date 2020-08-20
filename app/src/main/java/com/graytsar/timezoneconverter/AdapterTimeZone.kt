@@ -1,6 +1,5 @@
 package com.graytsar.timezoneconverter
 
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,16 +22,34 @@ class AdapterTimeZone(private val activity:MainActivity): ListAdapter<ModelTimeZ
         holder.binding.lifecycleOwner = activity
         holder.binding.modelTimeZone = getItem(position)
 
-        //holder.binding.itemSearch.setOnClickListener {
-        //    holder.onClick(it)
-        //}
+        holder.binding.itemSearch.setOnClickListener {
+            holder.onClick(it)
+        }
     }
 }
 
 class ViewHolderTimeZone(view: View, val binding:ItemSearchBinding): RecyclerView.ViewHolder(view){
     fun onClick(view: View){
-        binding.modelTimeZone?.let { model ->
+        if(view.context is MainActivity){
+            (view.context as MainActivity).let { context ->
+                binding.modelTimeZone?.let { model ->
+                    context.mMenu?.findItem(R.id.searchView)?.collapseActionView()
 
+                    context.viewModelMain.selectedLongName.value = model.longName
+                    context.viewModelMain.selectedId.value = model.id
+                    context.viewModelMain.selectedOffset.value = model.offset
+                    context.viewModelMain.selectedTimeZone = model
+
+                    val zonedTime = ZonedDateTime.now(ZoneId.of(model.id)).toLocalTime()
+                    context.viewModelMain.selectedHour.value = zonedTime.hour
+                    context.viewModelMain.selectedMinute.value = zonedTime.minute
+
+                    val localTime = ZonedDateTime.now()
+                    context.viewModelMain.currentTime.value = "${String.format("%02d", localTime.hour)}:${String.format("%02d", localTime.minute)} UTC${localTime.offset}"
+
+                    context.timePicker.visibility = View.VISIBLE
+                }
+            }
         }
     }
 }

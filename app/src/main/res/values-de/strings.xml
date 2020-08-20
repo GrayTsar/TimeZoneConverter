@@ -5,6 +5,6 @@
     <string name="hintSearch">Das Suchen Symbol clicken, Oben Rechts</string>
     <string name="timeIn">In</string>
 
-    <string name="lightTheme">Helles Theme</string>
-    <string name="darkTheme">Dunkles Theme</string>
+    <string name="lightTheme">Helles Design</string>
+    <string name="darkTheme">Dunkles Design</string>
 </resources>

@@ -13,4 +13,8 @@ class ViewModelMain: ViewModel() {
     val selectedLongName:MutableLiveData<String> = MutableLiveData<String>()
     val selectedId:MutableLiveData<String> = MutableLiveData<String>()
     val selectedOffset:MutableLiveData<String> = MutableLiveData<String>()
+
+    val selectedHour:MutableLiveData<Int> = MutableLiveData<Int>()
+    val selectedMinute:MutableLiveData<Int> = MutableLiveData<Int>()
+    var selectedTimeZone:ModelTimeZone? = null
 }
