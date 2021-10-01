@@ -17,4 +17,6 @@ class ViewModelMain: ViewModel() {
     val selectedHour:MutableLiveData<Int> = MutableLiveData<Int>()
     val selectedMinute:MutableLiveData<Int> = MutableLiveData<Int>()
     var selectedTimeZone:ModelTimeZone? = null
+
+    val visibilityTimePicker:MutableLiveData<Boolean> = MutableLiveData<Boolean>(false);
 }

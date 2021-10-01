@@ -104,18 +104,14 @@ class MainActivity : AppCompatActivity() {
             if(constraint == null){
                 filteredList.addAll(list)
             } else {
-                val defaultLocale = Locale.getDefault()
-
-                val pattern = constraint.toString().toLowerCase(defaultLocale).trim()
+                val pattern = constraint.toString().lowercase().trim()
 
                 list.forEach{
-                    if
-                    (
-                        it.id.toLowerCase(defaultLocale).contains(pattern) ||
-                        it.longName.toLowerCase(defaultLocale).contains(pattern) ||
-                        it.offset.toLowerCase(defaultLocale).contains(pattern) ||
-                        it.shortName.toLowerCase(defaultLocale).contains(pattern)
-                    ){
+                    if ( it.id.lowercase().contains(pattern) ||
+                        it.longName.lowercase().contains(pattern) ||
+                        it.offset.lowercase().contains(pattern) ||
+                        it.shortName.lowercase().contains(pattern) ) {
+
                         filteredList.add(it)
                     }
                 }
@@ -272,6 +268,14 @@ class MainActivity : AppCompatActivity() {
                 timePicker.currentMinute = it
             } else {
                 timePicker.minute = it
+            }
+        })
+
+        viewModelMain.visibilityTimePicker.observe(this, androidx.lifecycle.Observer {
+            if(it) {
+                timePicker.visibility = View.VISIBLE;
+            } else {
+                timePicker.visibility = View.GONE
             }
         })
     }

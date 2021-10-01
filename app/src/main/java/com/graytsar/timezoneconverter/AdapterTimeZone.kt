@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.graytsar.timezoneconverter.databinding.ItemSearchBinding
-import kotlinx.android.synthetic.main.activity_main.*
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 
@@ -47,7 +46,8 @@ class ViewHolderTimeZone(view: View, val binding:ItemSearchBinding): RecyclerVie
                     val localTime = ZonedDateTime.now()
                     context.viewModelMain.currentTime.value = "${String.format("%02d", localTime.hour)}:${String.format("%02d", localTime.minute)} UTC${localTime.offset}"
 
-                    context.timePicker.visibility = View.VISIBLE
+
+                    context.viewModelMain.visibilityTimePicker.value = true;
                 }
             }
         }
