@@ -1,65 +1,59 @@
 package com.graytsar.timezoneconverter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.graytsar.timezoneconverter.databinding.ItemSearchBinding
-import org.threeten.bp.ZoneId
-import org.threeten.bp.ZonedDateTime
+import com.graytsar.timezoneconverter.databinding.ItemTimeZoneBinding
 
-class AdapterTimeZone(private val activity:MainActivity): ListAdapter<ModelTimeZone, ViewHolderTimeZone>(DiffCallbackTimeZone())  {
+class AdapterTimeZone(
+    private val activity: CronActivity,
+    private val listener: (UITimeZone) -> Unit
+) : ListAdapter<UITimeZone, AdapterTimeZone.ViewHolderTimeZone>(DIFF_CALLBACK) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderTimeZone {
-        val binding = DataBindingUtil.inflate<ItemSearchBinding>(LayoutInflater.from(activity), R.layout.item_search, parent, false)
-        return ViewHolderTimeZone(binding.root, binding)
+        val binding = ItemTimeZoneBinding.inflate(
+            LayoutInflater.from(activity),
+            parent,
+            false
+        )
+        return ViewHolderTimeZone(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolderTimeZone, position: Int) {
-        holder.binding.lifecycleOwner = activity
-        holder.binding.modelTimeZone = getItem(position)
+        when (val item = getItem(position)) {
+            is UITimeZone -> {
+                holder.longName.text = item.longName
+                holder.zoneId.text = item.id
+                holder.offset.text = item.offset
+                holder.itemView.setOnClickListener { listener(item) }
+            }
 
-        holder.binding.itemSearch.setOnClickListener {
-            holder.onClick(it)
-        }
-    }
-}
-
-class ViewHolderTimeZone(view: View, val binding:ItemSearchBinding): RecyclerView.ViewHolder(view){
-    fun onClick(view: View){
-        if(view.context is MainActivity){
-            (view.context as MainActivity).let { context ->
-                binding.modelTimeZone?.let { model ->
-                    context.mMenu?.findItem(R.id.searchView)?.collapseActionView()
-
-                    context.viewModelMain.selectedLongName.value = model.longName
-                    context.viewModelMain.selectedId.value = model.id
-                    context.viewModelMain.selectedOffset.value = model.offset
-                    context.viewModelMain.selectedTimeZone = model
-
-                    val zonedTime = ZonedDateTime.now(ZoneId.of(model.id)).toLocalTime()
-                    context.viewModelMain.selectedHour.value = zonedTime.hour
-                    context.viewModelMain.selectedMinute.value = zonedTime.minute
-
-                    val localTime = ZonedDateTime.now()
-                    context.viewModelMain.currentTime.value = "${String.format("%02d", localTime.hour)}:${String.format("%02d", localTime.minute)} UTC${localTime.offset}"
-
-
-                    context.viewModelMain.visibilityTimePicker.value = true;
-                }
+            else -> {
+                holder.longName.text = ""
+                holder.zoneId.text = ""
+                holder.offset.text = ""
+                holder.itemView.setOnClickListener(null)
             }
         }
     }
-}
 
-class DiffCallbackTimeZone: DiffUtil.ItemCallback<ModelTimeZone>(){
-    override fun areItemsTheSame(oldItem: ModelTimeZone, newItem: ModelTimeZone): Boolean {
-        return oldItem.id == newItem.id && oldItem.longName == newItem.longName && oldItem.offset == newItem.offset
+    inner class ViewHolderTimeZone(
+        binding: ItemTimeZoneBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+        val longName = binding.longName
+        val zoneId = binding.zoneId
+        val offset = binding.offset
     }
 
-    override fun areContentsTheSame(oldItem: ModelTimeZone, newItem: ModelTimeZone): Boolean {
-        return oldItem.id == newItem.id && oldItem.longName == newItem.longName && oldItem.offset == newItem.offset
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<UITimeZone>() {
+            override fun areItemsTheSame(oldItem: UITimeZone, newItem: UITimeZone) =
+                oldItem.id == newItem.id && oldItem.longName == newItem.longName && oldItem.offset == newItem.offset
+
+            override fun areContentsTheSame(oldItem: UITimeZone, newItem: UITimeZone) =
+                oldItem.id == newItem.id && oldItem.longName == newItem.longName && oldItem.offset == newItem.offset
+        }
     }
 }

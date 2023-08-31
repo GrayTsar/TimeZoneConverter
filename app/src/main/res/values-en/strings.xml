@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Time Zone Converter</string>
     <string name="search">Search</string>
     <string name="hintSearch">Click the Search Icon, Top Right</string>
     <string name="timeIn">In</string>

@@ -6,6 +6,8 @@
     <color name="colorText">#2196f3</color>
     <color name="colorHint">#212121</color>
 
+    <color name="text_primary">#1565c0</color>
+
     <color name="colorBackground">#fafafa</color>
     <color name="colorTextSearch">#FFFFFF</color>
     <color name="colorTextSearchHint">#eeeeee</color>

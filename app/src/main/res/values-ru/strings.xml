@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">вычислитель часового пояса</string>
     <string name="search">Поиск</string>
     <string name="hintSearch">Нажать на символ в правом верхнем угу</string>
     <string name="timeIn">Через</string>
