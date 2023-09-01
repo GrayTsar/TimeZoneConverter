@@ -1,12 +1,12 @@
 <resources>
     <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorControlNormal">@color/colorToolbarItems</item>
-        <item name="colorControlActivated">@color/colorToolbarItems</item>
+        <item name="colorControlNormal">@color/toolbar_item</item>
+        <item name="colorControlActivated">@color/toolbar_item</item>
 
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="titleTextColor">@color/colorTextSearch</item>
-        <item name="colorAccent">@color/colorTextSearch</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary</item>
+        <item name="titleTextColor">#ffffff</item>
+        <item name="colorAccent">@color/accent</item>
 
         <item name="drawerArrowStyle">@style/ArrowHamburgerStyle</item>
     </style>
@@ -17,11 +17,11 @@
     </style>
 
     <style name="PopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
-        <item name="android:textColor">@color/colorToolbarMenuText</item>
-        <item name="android:itemBackground">@color/colorBackground</item>
+        <item name="android:textColor">@color/toolbar_menu_text</item>
+        <item name="android:itemBackground">@color/background</item>
     </style>
 
     <style name="ArrowHamburgerStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
-        <item name="color">@color/colorToolbarItems</item>
+        <item name="color">@color/toolbar_item</item>
     </style>
 </resources>

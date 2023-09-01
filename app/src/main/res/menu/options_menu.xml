@@ -6,6 +6,6 @@
         android:id="@+id/searchView"
         android:icon="@drawable/ic_search_white_24dp"
         android:title="@string/search"
-        app:iconTint="@color/colorToolbarItems"
+        app:iconTint="@color/toolbar_item"
         app:showAsAction="always" />
 </menu>
