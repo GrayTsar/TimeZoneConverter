@@ -5,11 +5,15 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.TimePicker
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.graytsar.timezoneconverter.databinding.ActivityCronBinding
@@ -55,6 +59,17 @@ class CronActivity : AppCompatActivity() {
 
         timePicker.setOnTimeChangedListener(timeChangedListener)
         adapterTimeZone.submitList(viewModel.timeZones)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.include.appbar) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                leftMargin = insets.left
+                bottomMargin = insets.bottom
+                rightMargin = insets.right
+                topMargin = insets.top
+            }
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
